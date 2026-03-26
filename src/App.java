@@ -1,9 +1,7 @@
 import java.util.*;
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║            ABSTRACT CLASS — Transaksi                    ║
-// ╚══════════════════════════════════════════════════════════╝
 
+// ABSTRACT CLASS — Transaksi                    
 abstract class Transaksi {
     protected int    id;
     protected String tanggal;
@@ -32,10 +30,7 @@ abstract class Transaksi {
     public int    getId()        { return id; }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║            SUBCLASS — Pemasukan                          ║
-// ╚══════════════════════════════════════════════════════════╝
-
+//SUBCLASS — Pemasukan                          
 class Pemasukan extends Transaksi {
     private String tipe;
 
@@ -50,10 +45,7 @@ class Pemasukan extends Transaksi {
     public String getTipePemasukan() { return tipe; }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║            SUBCLASS — Pengeluaran                        ║
-// ╚══════════════════════════════════════════════════════════╝
-
+//SUBCLASS — Pengeluaran                        
 class Pengeluaran extends Transaksi {
     private String kategori;
 
@@ -68,10 +60,7 @@ class Pengeluaran extends Transaksi {
     public String getKategori() { return kategori; }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║            CLASS — TargetTabungan                        ║
-// ╚══════════════════════════════════════════════════════════╝
-
+//CLASS — TargetTabungan                        
 class TargetTabungan {
     private String namaTarget;
     private double targetNominal;
@@ -113,10 +102,8 @@ class TargetTabungan {
     public boolean sudahTercapai()   { return terkumpul >= targetNominal; }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║            CLASS — AnggaranBulanan                       ║
-// ╚══════════════════════════════════════════════════════════╝
 
+//CLASS — AnggaranBulanan                       
 class AnggaranBulanan {
     private Map<String, Double> batasAnggaran;
     private Map<String, Double> realisasi;
@@ -159,10 +146,7 @@ class AnggaranBulanan {
     public Map<String, Double> getRealisasi()     { return realisasi; }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║            CLASS — DompetDigital                         ║
-// ╚══════════════════════════════════════════════════════════╝
-
+//CLASS — DompetDigital                         
 class DompetDigital {
     private String namaDompet;
     private double saldo;
@@ -179,10 +163,7 @@ class DompetDigital {
     public double getSaldo()      { return saldo; }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║            CLASS UTAMA — AnakKos                         ║
-// ╚══════════════════════════════════════════════════════════╝
-
+//CLASS UTAMA — AnakKos                         
 class AnakKos {
     private String nama;
     private double totalSaldo;
@@ -270,7 +251,6 @@ class AnakKos {
                 t.tambahTabungan(jumlah);
                 totalSaldo -= jumlah;
                 
-                // Masukkan ke kategori "TABUNGAN" di anggaran agar muncul di laporan akhir
                 if (anggaranAktif != null) {
                     anggaranAktif.tambahRealisasi("TABUNGAN", jumlah);
                 }
@@ -279,7 +259,7 @@ class AnakKos {
                         tanggal, namaTarget, jumlah,
                         t.getTerkumpul() / t.getTargetNominal() * 100, totalSaldo);
                 if (t.sudahTercapai()) {
-                    System.out.println("  *** TARGET \"" + namaTarget.toUpperCase() + "\" TERCAPAI! ***");
+                    System.out.println(" YEYYYY TARGET \"" + namaTarget.toUpperCase() + "\" TERCAPAI! ");
                 }
                 return;
             }
@@ -325,7 +305,7 @@ class AnakKos {
 
         System.out.println();
         System.out.println("  ══════════════════════════════════════════════════");
-        System.out.printf( "        RINGKASAN KEUANGAN — %-23s%n", nama.toUpperCase());
+        System.out.printf( "        RINGKASAN KEUANGAN %-23s%n", nama.toUpperCase());
         System.out.println("  ══════════════════════════════════════════════════");
         System.out.printf( "     Total Pemasukan    :  Rp %,20.0f    %n", totalMasuk);
         System.out.printf( "     Total Pengeluaran  :  Rp %,20.0f    %n", totalKeluar);
@@ -361,22 +341,18 @@ class AnakKos {
     public double getTotalSaldo() { return totalSaldo; }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║                    MAIN CLASS                            ║
-// ╚══════════════════════════════════════════════════════════╝
-
+//MAIN CLASS                            
 public class App {
     static void garis(char c, int n) { System.out.println(String.valueOf(c).repeat(n)); }
     static void header(String judul) {
         System.out.println();
-        garis('-', 62);
         System.out.println("  " + judul);
         garis('-', 62);
     }
 
     public static void main(String[] args) {
         garis('=', 62);
-        System.out.println("     MoneyKos — Manajemen Keuangan Anak Kos");
+        System.out.println("     MoneyKos| Manajemen Keuangan Anak Kos");
         garis('=', 62);
 
         // [1] PROFIL NAYLA
@@ -405,14 +381,14 @@ public class App {
         user.setAnggaranKategori("KEBUTUHAN_KOST", 350_000);
         user.setAnggaranKategori("HIBURAN", 100_000);
         user.setAnggaranKategori("PENDIDIKAN", 200_000);
-        user.setAnggaranKategori("TABUNGAN", 0); // Kategori khusus tabungan
+        user.setAnggaranKategori("TABUNGAN", 0);
 
         // [5] PEMASUKAN MARET
-        header("[5] PEMASUKAN — MARET 2026");
+        header("[5] PEMASUKAN MARET 2026");
         user.tambahPemasukan("01 Mar", 2_000_000, "Kiriman bulanan Mama", "Kiriman Ortu");
 
         // [6] PENGELUARAN MARET
-        header("[6] PENGELUARAN — MARET 2026");
+        header("[6] PENGELUARAN MARET 2026");
         user.tambahPengeluaran("01 Mar", 500_000, "Bayar kos", "KEBUTUHAN_KOST");
         user.tambahPengeluaran("02 Mar", 20_000, "Sarapan nasi kuning", "MAKANAN");
         user.tambahPengeluaran("04 Mar", 45_000, "Print laporan tugas IT", "PENDIDIKAN");
@@ -423,12 +399,12 @@ public class App {
         user.tambahPengeluaran("20 Mar", 310_000, "Beli Sprei baru", "KEBUTUHAN_KOST");
 
         // [7] MENABUNG MARET
-        header("[7] MENABUNG — MARET 2026");
+        header("[7] MENABUNG MARET 2026");
         user.simpanKeTarget("iPad Pro M2", 200_000, "25 Mar");
         user.simpanKeTarget("blindbox hirono", 300_000, "29 Mar");
 
         // [8] LAPORAN MARET
-        header("[8] LAPORAN AKHIR — MARET 2026");
+        header("[8] LAPORAN AKHIR MARET 2026");
         System.out.println("  > Breakdown Pengeluaran per Kategori:");
         user.tampilkanBreakdownKategori("Maret 2026");
         System.out.println("  > Evaluasi Anggaran:");

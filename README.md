@@ -15,9 +15,9 @@ Setelah saya menjalani sebagai anak rantau, menjadi mahasiswa perantauan bukanla
 
 ### Masalah yang Menumpuk
 
-- Tidak Ada Catatan Real-Time: Nayla tidak sadar bahwa akumulasi pengeluaran kecil seperti jajan nasi kuning dan kopi bisa membengkak.
-- Ambisi Finansial yang Terhambat: Nayla ingin membeli iPad Pro M2 untuk menunjang desain UI/UX dan mengoleksi blind box Hirono, namun tabungannya tidak pernah terkumpul karena selalu terpakai untuk "keadaan darurat" yang sebenarnya bisa dihindari.
-- Overbudgeting: Nayla sering melampaui anggaran hiburan tanpa peringatan, sehingga uang jatah pendidikan atau kost sering terpakai.
+- Tidak Ada Catatan Real-Time: Saya tidak sadar bahwa akumulasi pengeluaran kecil seperti jajan cilok dan kopi bisa membengkak.
+- Ambisi Finansial yang Terhambat: Saya ingin membeli iPad Pro M2 untuk menunjang desain UI/UX dan mengoleksi blind box Hirono, namun tabungannya tidak pernah terkumpul karena selalu terpakai untuk "keadaan darurat" yang sebenarnya bisa dihindari.
+- Overbudgeting: Saya sering melampaui anggaran hiburan tanpa peringatan, sehingga uang jatah pendidikan atau kost sering terpakai.
 
 
 ### Konsep MoneyKos
@@ -29,13 +29,13 @@ Mencatat semua saldo yang ada. Baik tunai, dibank mobile ataupun digopay.
 
 
 2. **Pencatatan pemasukan** 
-dari kiriman bulanan
+Dari kiriman bulanan
 
 3. **Pencatatan pengeluaran** 
-yang dikategorikan: makanan, kebutuhan kos, hiburan, dan pendidikan.
+Yang dikategorikan: makanan, kebutuhan kos, hiburan, dan pendidikan.
 
 4. **Anggaran bulanan** 
-setiap kategori punya batas maksimal. Jika sudah melebihi batas, sistem langsung memberi peringatan saat itu juga.
+Setiap kategori punya batas maksimal. Jika sudah melebihi batas, sistem langsung memberi peringatan saat itu juga.
 
 5. **Target tabungan**  
 Ada nama tujuan, nominal target, dan progress bar-nya.
@@ -44,13 +44,13 @@ Ada nama tujuan, nominal target, dan progress bar-nya.
 sistem menolak pengeluaran yang melebihi saldo. 
 
 7. **Laporan bulanan** 
-breakdown pengeluaran per kategori dan evaluasi anggaran tersedia untuk setiap bulan.
+Breakdown pengeluaran per kategori dan evaluasi anggaran tersedia untuk setiap bulan.
 
 ### Komponen dalam Sistem
 
-**`AnakKos`** adalah kelas inti yang mewakili saya(Nayla) sebagai pengguna. Menyimpan semua data keuangan — dompet, pemasukan, pengeluaran, tabungan, anggaran — dan menjadi pusat seluruh operasi.
+**`AnakKos`** adalah kelas inti yang mewakili saya(Nayla) sebagai pengguna. Menyimpan semua data keuangan (dompet, pemasukan, pengeluaran, tabungan, anggaran) dan menjadi pusat seluruh operasi.
 
-**`Transaksi`** adalah abstract class sebagai kerangka umum untuk semua pencatatan uang. Dua subclass-nya — `Pemasukan` dan `Pengeluaran` — mewarisi atribut dasarnya namun memiliki atribut tambahan yang berbeda.
+**`Transaksi`** adalah abstract class sebagai kerangka umum untuk semua pencatatan uang. Dua subclass-nya (`Pemasukan` dan `Pengeluaran`) mewarisi atribut dasarnya namun memiliki atribut tambahan yang berbeda.
 
 **`DompetDigital`** memberikan informasi sumber uang saya. Saldo dari semua dompet baik tunai ataupun nontunai menjadi saldo awal sistem.
 
@@ -58,87 +58,18 @@ breakdown pengeluaran per kategori dan evaluasi anggaran tersedia untuk setiap b
 
 **`TargetTabungan`** menampilkan target yang ingin saya capai masing-masing dengan nominal target, jumlah yang sudah terkumpul, dan progress bar visual.
 
-
-
-
-
 ---
 
 ## Class Diagram
 
-```mermaid
-classDiagram
-    class Transaksi {
-        <<abstract>>
-        #int id
-        #String tanggal
-        #double jumlah
-        #String keterangan
-        +getTipe()* String
-        +tampilkanInfo() void
-    }
-    class Pemasukan {
-        -String tipe
-        +getTipe() String
-    }
-    class Pengeluaran {
-        -String kategori
-        +getTipe() String
-        +getKategori() String
-    }
-    class TargetTabungan {
-        -String namaTarget
-        -double targetNominal
-        -double terkumpul
-        +tambahTabungan(double jumlah) void
-        +tampilkanInfo() void
-    }
-    class AnggaranBulanan {
-        -Map~String, Double~ batasAnggaran
-        -Map~String, Double~ realisasi
-        +setBatas(String kat, double limit) void
-        +tambahRealisasi(String kat, double jml) void
-        +isMelebihiBatas(String kat) boolean
-    }
-    class DompetDigital {
-        -String namaDompet
-        -double saldo
-        +tambahSaldo(double jumlah) void
-        +kurangiSaldo(double jumlah) void
-        +getSaldo() double
-    }
-    class AnakKos {
-        -String nama
-        -double totalSaldo
-        -List~Pemasukan~ daftarPemasukan
-        -List~Pengeluaran~ daftarPengeluaran
-        -List~TargetTabungan~ daftarTarget
-        +tambahPemasukan() void
-        +tambahPengeluaran() void
-        +tampilkanRingkasan() void
-    }
-    Transaksi <|-- Pemasukan
-    Transaksi <|-- Pengeluaran
-    AnakKos "1" *-- "many" Transaksi
-    AnakKos "1" *-- "many" TargetTabungan
-    AnakKos "1" *-- "1" AnggaranBulanan
-    AnakKos "1" *-- "many" DompetDigital
-```
+![gambar class diagramnya](assets/class_diagram.png)
+[Kode Class Diagram (Mermaid)](./src/diagram.mmd)
 
 ---
 
 ## Kode Program Java
 
-Seluruh implementasi dalam satu file:
-
-- [`App.java`](./App.java)
-
-### Cara Menjalankan
-
-```bash
-javac -d bin App.java
-java -cp bin App
-```
+[Kode Program Java Lengkap](./src/App.java)
 
 ### Highlight Kode Penting
 
@@ -160,7 +91,7 @@ abstract class Transaksi {
 }
 ```
 
-> `Transaksi` menjadi kontrak bersama untuk `Pemasukan` dan `Pengeluaran`. Method `getTipe()` dibuat abstract sehingga setiap subclass wajib menyatakan tipe-nya sendiri. Sedangkan `tampilkanInfo()` cukup ditulis sekali di sini dan langsung diwarisi oleh kedua subclass.
+`Transaksi` menjadi kontrak bersama untuk `Pemasukan` dan `Pengeluaran`. Method `getTipe()` dibuat abstract sehingga setiap subclass wajib menyatakan tipe-nya sendiri. Sedangkan `tampilkanInfo()` cukup ditulis sekali di sini dan langsung diwarisi oleh kedua subclass.
 
 ---
 
@@ -175,7 +106,7 @@ class Pemasukan extends Transaksi {
 }
 
 class Pengeluaran extends Transaksi {
-    private String kategori; // contoh: "Makanan", "Hiburan"
+    private String kategori; // contoh: "MAKANAN", "HIBURAN"
 
     @Override
     public String getTipe() { return "KELUAR"; }
@@ -183,7 +114,7 @@ class Pengeluaran extends Transaksi {
 }
 ```
 
-> Masing-masing hanya perlu menambahkan satu atribut unik dan mengimplementasikan `getTipe()`. Atribut `id`, `tanggal`, `jumlah`, `keterangan`, serta `tampilkanInfo()` sudah diwarisi dari `Transaksi` tanpa perlu ditulis ulang.
+Masing-masing hanya perlu menambahkan satu atribut unik dan mengimplementasikan `getTipe()`. Atribut `id`, `tanggal`, `jumlah`, `keterangan`, serta `tampilkanInfo()` sudah diwarisi dari `Transaksi` tanpa perlu ditulis ulang.
 
 ---
 
@@ -209,7 +140,7 @@ public void tambahDompet(DompetDigital dompet) {
 }
 ```
 
-> Uang Rafi tersebar di tiga tempat berbeda. Dengan mendaftarkan setiap dompet ke sistem, saldo awal yang diperhitungkan sudah merangkum ketiganya sekaligus — bukan hanya satu rekening.
+Uang saya tersebar di tiga tempat berbeda: Tunai, BCA Mobile, dan GoPay. Dengan mendaftarkan setiap dompet ke sistem, saldo awal yang diperhitungkan sudah merangkum ketiganya sekaligus, bukan hanya satu rekening.
 
 ---
 
@@ -229,7 +160,7 @@ public boolean isMelebihiBatas(String kat) {
 }
 ```
 
-> Dengan menyimpan setiap `AnggaranBulanan` ke dalam `Map<String, AnggaranBulanan>`, laporan Maret dan April bisa ditampilkan secara terpisah kapan saja — bukan hanya di akhir simulasi.
+Dengan menyimpan setiap `AnggaranBulanan` ke dalam `Map<String, AnggaranBulanan>`, laporan Maret dan April bisa ditampilkan secara terpisah kapan saja.
 
 ---
 
@@ -245,7 +176,7 @@ if (anggaranAktif.isMelebihiBatas(kategori)) {
 }
 ```
 
-> Alert muncul tepat saat transaksi terjadi — bukan hanya saat laporan bulanan dibuka. Ini memberi umpan balik langsung kepada pengguna sebelum pengeluaran semakin membengkak.
+Alert muncul tepat saat transaksi terjadi — bukan hanya saat laporan bulanan dibuka. Ini memberi umpan balik langsung kepada saya sebelum pengeluaran semakin membengkak.
 
 ---
 
@@ -262,7 +193,7 @@ public void tambahPengeluaran(...) {
 }
 ```
 
-> Transaksi yang melebihi saldo langsung ditolak dengan pesan yang menjelaskan berapa yang dibutuhkan dan berapa yang dimiliki. Ini mencegah kondisi saldo negatif dan mensimulasikan perilaku kartu debit.
+Transaksi yang melebihi saldo langsung ditolak dengan pesan yang menjelaskan berapa yang dibutuhkan dan berapa yang dimiliki. Ini mencegah kondisi saldo negatif dan mensimulasikan perilaku kartu debit.
 
 ---
 
@@ -277,7 +208,7 @@ semua.sort(Comparator.comparingInt(Transaksi::getId));
 for (Transaksi t : semua) t.tampilkanInfo(); // polymorphism
 ```
 
-> `Pemasukan` dan `Pengeluaran` digabung ke satu `List<Transaksi>`, lalu diurutkan berdasarkan ID. Saat `tampilkanInfo()` dipanggil, Java otomatis menjalankan versi yang tepat berdasarkan tipe objek aslinya.
+`Pemasukan` dan `Pengeluaran` digabung ke satu `List<Transaksi>`, lalu diurutkan berdasarkan ID. Saat `tampilkanInfo()` dipanggil, Java otomatis menjalankan versi yang tepat berdasarkan tipe objek aslinya.
 
 ---
 
@@ -293,25 +224,25 @@ private String buatProgressBar(double persen) {
 }
 ```
 
-> Progress tabungan ditampilkan sebagai bar visual `[========------------]` sehingga seberapa dekat Rafi dengan targetnya langsung terasa intuitif tanpa harus menghitung sendiri.
+Progress tabungan ditampilkan sebagai bar visual `[========------]` sehingga seberapa dekat saya dengan target saya langsung bisa dilihat tanpa harus menghitung sendiri.
 
 ---
 
 ## Screenshot Output
-
+![alt text](assets/output.png)
 
 ---
 
 ## Prinsip OOP yang Diterapkan
 
 ### 1. Abstraction
-`Transaksi` dibuat sebagai abstract class yang mendefinisikan struktur umum sebuah pencatatan uang. Method `getTipe()` bersifat abstract karena setiap subclass memiliki tipe yang berbeda. Kode yang memproses daftar transaksi tidak perlu mengetahui apakah objeknya `Pemasukan` atau `Pengeluaran` — cukup panggil `tampilkanInfo()`.
+`Transaksi` dibuat sebagai abstract class yang mendefinisikan struktur umum sebuah pencatatan uang. Method `getTipe()` bersifat abstract karena setiap subclass memiliki tipe yang berbeda. Kode yang memproses daftar transaksi tidak perlu mengetahui apakah objeknya `Pemasukan` atau `Pengeluaran`, cukup panggil `tampilkanInfo()`.
 
 ### 2. Inheritance
 `Pemasukan` dan `Pengeluaran` mewarisi `Transaksi`. Keduanya otomatis mendapatkan atribut `id`, `tanggal`, `jumlah`, `keterangan`, serta method `tampilkanInfo()` tanpa menulis ulang. Masing-masing hanya menambahkan atribut yang unik: `Pemasukan` menambah `tipe`, `Pengeluaran` menambah `kategori`.
 
 ### 3. Encapsulation
-Semua atribut di seluruh class menggunakan access modifier `private` atau `protected`. Saldo di `AnakKos` hanya bisa berubah melalui method resmi `tambahDompet()`, `tambahPemasukan()`, `tambahPengeluaran()`, atau `simpanKeTarget()` — tidak bisa diubah langsung dari luar class.
+Semua atribut di seluruh class menggunakan access modifier `private` atau `protected`. Saldo di `AnakKos` hanya bisa berubah melalui method resmi `tambahDompet()`, `tambahPemasukan()`, `tambahPengeluaran()`, atau `simpanKeTarget()`, tidak bisa diubah langsung dari luar class.
 
 ### 4. Polymorphism
 `Pemasukan` dan `Pengeluaran` digabungkan ke satu `List<Transaksi>` saat menampilkan riwayat. Method `tampilkanInfo()` dipanggil secara seragam pada semua elemen, namun Java otomatis menjalankan versi yang tepat berdasarkan tipe objek aslinya. Begitu pula `getTipe()` yang menghasilkan `"MASUK"` atau `"KELUAR"` secara berbeda meski dipanggil dari referensi bertipe `Transaksi`.
@@ -330,7 +261,7 @@ Melalui class `DompetDigital`, saldo awal Rafi diperhitungkan dari tiga sumber: 
 Pelanggaran anggaran terdeteksi **tepat saat transaksi terjadi**, bukan hanya saat laporan dibuka. Pengguna langsung tahu di mana pengeluarannya membengkak.
 
 ### 4. Progress Bar Visual untuk Tabungan Bertujuan
-Setiap target tabungan ditampilkan dengan progress bar ASCII `[========------------]` yang membuat progres terasa intuitif dan memotivasi.
+Setiap target tabungan ditampilkan dengan progress bar ASCII `[========---------]` yang membuat progres terasa intuitif dan memotivasi.
 
 ---
 
