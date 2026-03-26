@@ -1,0 +1,56 @@
+classDiagram
+    class Transaksi {
+        <<abstract>>
+        #int id
+        #String tanggal
+        #double jumlah
+        #String keterangan
+        +getTipe()* String
+        +tampilkanInfo() void
+    }
+    class Pemasukan {
+        -String tipe
+        +getTipe() String
+    }
+    class Pengeluaran {
+        -String kategori
+        +getTipe() String
+        +getKategori() String
+    }
+    class TargetTabungan {
+        -String namaTarget
+        -double targetNominal
+        -double terkumpul
+        +tambahTabungan(double jumlah) void
+        +tampilkanInfo() void
+    }
+    class AnggaranBulanan {
+        -Map~String, Double~ batasAnggaran
+        -Map~String, Double~ realisasi
+        +setBatas(String kat, double limit) void
+        +tambahRealisasi(String kat, double jml) void
+        +isMelebihiBatas(String kat) boolean
+    }
+    class DompetDigital {
+        -String namaDompet
+        -double saldo
+        +tambahSaldo(double jumlah) void
+        +kurangiSaldo(double jumlah) void
+        +getSaldo() double
+    }
+    class AnakKos {
+        -String nama
+        -double totalSaldo
+        -List~Pemasukan~ daftarPemasukan
+        -List~Pengeluaran~ daftarPengeluaran
+        -List~TargetTabungan~ daftarTarget
+        +tambahPemasukan() void
+        +tambahPengeluaran() void
+        +tampilkanRingkasan() void
+    }
+    Transaksi <|-- Pemasukan
+    Transaksi <|-- Pengeluaran
+    AnakKos "1" *-- "many" Transaksi
+    AnakKos "1" *-- "many" TargetTabungan
+    AnakKos "1" *-- "1" AnggaranBulanan
+    AnakKos "1" *-- "many" DompetDigital
