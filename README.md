@@ -91,7 +91,7 @@ abstract class Transaksi {
 }
 ```
 
-`Transaksi` menjadi kontrak bersama untuk `Pemasukan` dan `Pengeluaran`. Method `getTipe()` dibuat abstract sehingga setiap subclass wajib menyatakan tipe-nya sendiri. Sedangkan `tampilkanInfo()` cukup ditulis sekali di sini dan langsung diwarisi oleh kedua subclass.
+Saya jadikan `Transaksi` sebagai kerangka dasar supaya `Pemasukan` dan `Pengeluaran` punya struktur yang sama. `getTipe()` saya buat abstract karena memang kedua subclass ini harus ngasih label tipenya sendiri, yang satu `"MASUK"`, yang satu `"KELUAR"`. Sementara `tampilkanInfo()` cukup saya tulis sekali di sini, otomatis kepakai di keduanya.
 
 ---
 
@@ -252,7 +252,7 @@ Semua atribut di seluruh class menggunakan access modifier `private` atau `prote
 ## Keunikan Program
 
 ### 1. Laporan Tersedia Per Bulan, Bukan Hanya di Akhir
-Sistem menyimpan instance `AnggaranBulanan` di dalam `Map<String, AnggaranBulanan>` berdasarkan nama bulan. Dengan begitu, laporan breakdown dan evaluasi anggaran bisa ditampilkan untuk Maret maupun April secara terpisah, mencerminkan cara kerja aplikasi keuangan nyata.
+Ide awalnya simpel — saya pengen bisa lihat laporan Maret dan April secara terpisah tanpa data keduanya kecamp. Makanya saya simpan tiap `AnggaranBulanan` di dalam Map dengan kunci nama bulannya. Jadi tinggal panggil `"Maret 2026"` dan laporannya langsung keluar.
 
 ### 2. Saldo Awal dari Banyak Dompet
 Melalui class `DompetDigital`, saldo awal saya diperhitungkan dari tiga sumber: uang tunai, rekening bank, dan GoPay. Ini lebih realistis dibanding sekadar menginput satu angka saldo awal.
